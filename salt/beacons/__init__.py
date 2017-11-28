@@ -67,8 +67,9 @@ class Beacon(object):
                     else:
                         self._remove_list_item(config[mod], 'enabled')
 
-            log.trace('Beacon processing: {0}'.format(mod))
-            fun_str = '{0}.beacon'.format(mod)
+            mod_name = re.match('(\w+).*', mod).groups()[0]
+            log.trace('Beacon processing: {0}'.format(mod_name))
+            fun_str = '{0}.beacon'.format(mod_name)
             if fun_str in self.beacons:
                 runonce = self._determine_beacon_config(current_beacon_config, 'run_once')
                 interval = self._determine_beacon_config(current_beacon_config, 'interval')
