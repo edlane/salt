@@ -124,7 +124,7 @@ def beacon(config):
     log.debug(config)
     ctime = datetime.datetime.utcnow().isoformat()
     # ret = {}
-    shape = '5'
+    # shape = '5'
 
     print ("config=", config)
     sys.stdout.flush()
@@ -141,17 +141,20 @@ def beacon(config):
 
         except ValueError:
             # not an executable module/function
-            if name == 'shape':
-                shape = values
+            if name == 'on_true':
+                on_true = values
             continue
 
     ret = __salt__['{0}.{1}'.format(exec_module, func)](*mod_values)
-    local_dict = {'ret': ret}
 
-    print ('--------------------- ', eval(shape, {"__builtins__": None}, local_dict))
+    return_it = eval(on_true, {"__builtins__": None}, {'ret': ret})
+    print ('--------------------- ', return_it)
     sys.stdout.flush()
-    return [{'tag': ctime,
-            'data': {func: ret}}]
+    if return_it:
+        return [{'tag': ctime,
+                'data': {func: ret}}]
+
+    return []
 
     # if salt.utils.is_windows():
     #     return [{
