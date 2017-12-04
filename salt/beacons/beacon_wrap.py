@@ -150,9 +150,15 @@ def beacon(config):
     return_it = eval(on_true, {"__builtins__": None}, {'ret': ret})
     print ('--------------------- ', return_it)
     sys.stdout.flush()
+
     if return_it:
-        return [{'tag': ctime,
+        ret = [{'tag': ctime,
                 'data': {func: ret}}]
+        if 'return' in config:
+            for return_entry in config['return']:
+                salt.loader.returners(__salt__.__dict__['opts'], None)[
+                '{0}.returner'.format(return_entry)](ret)
+        return ret
 
     return []
 

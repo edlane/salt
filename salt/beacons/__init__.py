@@ -27,6 +27,7 @@ class Beacon(object):
         self.functions = functions
         self.beacons = salt.loader.beacons(opts, functions)
         self.interval_map = dict()
+        self.returners = salt
 
     def process(self, config, grains):
         '''
